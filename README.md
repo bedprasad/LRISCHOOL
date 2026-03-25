@@ -1,2 +1,0 @@
-# LRISCHOOL
-Online Courses
