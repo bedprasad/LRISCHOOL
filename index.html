@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEB Learning — Nepal School Courses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ══ TOKENS ══ */
+:root {
+  --bg:       #0d1117;
+  --bg2:      #161b22;
+  --bg3:      #21262d;
+  --border:   rgba(255,255,255,.08);
+  --border2:  rgba(255,255,255,.14);
+  --text:     #e6edf3;
+  --muted:    #7d8590;
+  --accent:   #f78166;
+
+  --math:     #58a6ff;
+  --science:  #3fb950;
+  --english:  #d2a8ff;
+  --nepali:   #ff7b72;
+  --social:   #ffa657;
+  --computer: #79c0ff;
+
+  --font-ui:   'Sora', sans-serif;
+  --font-body: 'Crimson Pro', Georgia, serif;
+  --radius:    12px;
+  --radius-lg: 20px;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ══ BACKGROUND MESH ══ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(88,166,255,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 80% 80%, rgba(63,185,80,.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 60% 30%, rgba(247,129,102,.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ══ NAV ══ */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13,17,23,.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15pt;
+  font-weight: 800;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -.02em;
+}
+.nav-brand .dot {
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.nav-meta {
+  font-size: 9.5pt;
+  color: var(--muted);
+  font-weight: 400;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* ══ HERO ══ */
+.hero {
+  position: relative;
+  z-index: 1;
+  padding: 90px 40px 70px;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(247,129,102,.12);
+  border: 1px solid rgba(247,129,102,.25);
+  color: var(--accent);
+  font-size: 9.5pt;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+.hero-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .5; transform: scale(.8); }
+}
+.hero h1 {
+  font-size: clamp(28pt, 5vw, 46pt);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.hero h1 em {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--accent);
+}
+.hero p {
+  font-family: var(--font-body);
+  font-size: 14pt;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto 40px;
+}
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.stat {
+  text-align: center;
+}
+.stat-num {
+  font-size: 22pt;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -.03em;
+}
+.stat-label {
+  font-size: 9pt;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-top: 4px;
+}
+
+/* ══ FILTERS ══ */
+.filters-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 40px 32px;
+}
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.filter-label {
+  font-size: 9pt;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  min-width: 60px;
+}
+.filter-btn {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-family: var(--font-ui);
+  font-size: 9.5pt;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.filter-btn:hover {
+  border-color: rgba(255,255,255,.25);
+  color: var(--text);
+}
+.filter-btn.active {
+  background: var(--active-color, rgba(88,166,255,.15));
+  border-color: var(--active-color, rgba(88,166,255,.4));
+  color: var(--text);
+}
+
+/* Subject filter colors */
+.filter-btn[data-subject="Mathematics"].active   { --active-color: rgba(88,166,255,.2); border-color: rgba(88,166,255,.5); color: var(--math); }
+.filter-btn[data-subject="Science"].active       { --active-color: rgba(63,185,80,.2);  border-color: rgba(63,185,80,.5);  color: var(--science); }
+.filter-btn[data-subject="English"].active       { --active-color: rgba(210,168,255,.2);border-color: rgba(210,168,255,.5);color: var(--english); }
+.filter-btn[data-subject="Nepali"].active        { --active-color: rgba(255,123,114,.2);border-color: rgba(255,123,114,.5);color: var(--nepali); }
+.filter-btn[data-subject="Social Studies"].active{ --active-color: rgba(255,166,87,.2); border-color: rgba(255,166,87,.5); color: var(--social); }
+.filter-btn[data-subject="Computer Science"].active{ --active-color: rgba(121,192,255,.2);border-color: rgba(121,192,255,.5);color: var(--computer); }
+
+.filter-btn[data-grade].active { background: rgba(247,129,102,.15); border-color: rgba(247,129,102,.4); color: var(--accent); }
+
+.search-wrap {
+  position: relative;
+  max-width: 360px;
+}
+.search-wrap input {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 9px 16px 9px 38px;
+  border-radius: 10px;
+  font-family: var(--font-ui);
+  font-size: 10pt;
+  outline: none;
+  transition: border-color .2s;
+}
+.search-wrap input::placeholder { color: var(--muted); }
+.search-wrap input:focus { border-color: rgba(255,255,255,.3); }
+.search-icon {
+  position: absolute;
+  left: 12px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+.results-count {
+  font-size: 9.5pt;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.results-count strong { color: var(--text); }
+
+/* ══ COURSE GRID ══ */
+.courses-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 40px 80px;
+}
+
+/* Grade section */
+.grade-section { margin-bottom: 52px; }
+.grade-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.grade-heading h2 {
+  font-size: 13pt;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.01em;
+}
+.grade-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.grade-count {
+  font-size: 9pt;
+  color: var(--muted);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+/* ── Course Card ── */
+.course-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp .4s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.course-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-color, var(--math));
+  opacity: .8;
+}
+.course-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border2);
+  box-shadow: 0 12px 40px rgba(0,0,0,.4);
+}
+.card-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+.card-subject {
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--card-color, var(--math));
+  margin-bottom: 6px;
+}
+.card-title {
+  font-size: 12pt;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 10px;
+  letter-spacing: -.01em;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.card-tag {
+  font-size: 8.5pt;
+  font-weight: 600;
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.card-arrow {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 14px;
+  transition: transform .2s, color .2s;
+}
+.course-card:hover .card-arrow {
+  transform: translateX(3px);
+  color: var(--text);
+}
+
+/* Coming soon card */
+.course-card.coming-soon {
+  opacity: .45;
+  cursor: default;
+  pointer-events: none;
+}
+.coming-badge {
+  font-size: 8pt;
+  font-weight: 700;
+  background: rgba(247,129,102,.15);
+  color: var(--accent);
+  border: 1px solid rgba(247,129,102,.3);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  grid-column: 1/-1;
+}
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 11pt; }
+
+/* Hidden */
+.hidden { display: none !important; }
+
+/* ══ FOOTER ══ */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 28px 40px;
+  text-align: center;
+  font-size: 9.5pt;
+  color: var(--muted);
+}
+footer strong { color: var(--text); }
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 640px) {
+  nav { padding: 0 20px; }
+  .hero { padding: 60px 20px 50px; }
+  .filters-wrap, .courses-wrap { padding-left: 20px; padding-right: 20px; }
+  .course-grid { grid-template-columns: 1fr 1fr; }
+  .stats-row { gap: 24px; }
+}
+@media (max-width: 400px) {
+  .course-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a class="nav-brand" href="#">
+    <span class="dot"></span>
+    NEB Learning
+  </a>
+  <span class="nav-meta">Nepal School Curriculum</span>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-tag">Free for all students</div>
+  <h1>Learn smarter with<br><em>interactive courses</em></h1>
+  <p>Complete NEB curriculum courses for Grades 6–10. Videos, formulas, quizzes, and past exam questions — all in one place.</p>
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num" id="stat-courses">30</div>
+      <div class="stat-label">Courses</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Grades</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Subjects</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Free</div>
+      <div class="stat-label">Always</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FILTERS ══ -->
+<div class="filters-wrap">
+  <div class="filters-row">
+    <span class="filter-label">Grade</span>
+    <button class="filter-btn active" data-grade="all" onclick="setGrade('all',this)">All</button>
+    <button class="filter-btn" data-grade="6"  onclick="setGrade('6',this)">Grade 6</button>
+    <button class="filter-btn" data-grade="7"  onclick="setGrade('7',this)">Grade 7</button>
+    <button class="filter-btn" data-grade="8"  onclick="setGrade('8',this)">Grade 8</button>
+    <button class="filter-btn" data-grade="9"  onclick="setGrade('9',this)">Grade 9</button>
+    <button class="filter-btn" data-grade="10" onclick="setGrade('10',this)">Grade 10</button>
+  </div>
+  <div class="filters-row">
+    <span class="filter-label">Subject</span>
+    <button class="filter-btn active" data-subject="all" onclick="setSubject('all',this)">All</button>
+    <button class="filter-btn" data-subject="Mathematics"     onclick="setSubject('Mathematics',this)">📐 Math</button>
+    <button class="filter-btn" data-subject="Science"        onclick="setSubject('Science',this)">🔬 Science</button>
+    <button class="filter-btn" data-subject="English"        onclick="setSubject('English',this)">📖 English</button>
+    <button class="filter-btn" data-subject="Nepali"         onclick="setSubject('Nepali',this)">🇳🇵 Nepali</button>
+    <button class="filter-btn" data-subject="Social Studies" onclick="setSubject('Social Studies',this)">🌏 Social</button>
+    <button class="filter-btn" data-subject="Computer Science" onclick="setSubject('Computer Science',this)">💻 Computer</button>
+  </div>
+  <div class="filters-row">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Search courses…" oninput="applyFilters()">
+    </div>
+  </div>
+  <div class="results-count" id="results-count"></div>
+</div>
+
+<!-- ══ COURSES ══ -->
+<div class="courses-wrap" id="courses-wrap">
+  <!-- Rendered by JS -->
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <strong>NEB Learning</strong> — Nepal School Curriculum · Grades 6–10 ·
+  Built with ❤️ for Nepali students · Content sourced from NEB syllabus
+</footer>
+
+<script>
+/* ══════════════════════════════════════
+   COURSE DATA
+   → Replace href with your actual GitHub Pages URLs
+   → Set live: false for courses not yet ready
+══════════════════════════════════════ */
+const COURSES = [
+  /* ── GRADE 6 ── */
+  { grade:'6', subject:'Mathematics',     title:'Mathematics',     icon:'📐', href:'math-grade6.html',     live:false },
+  { grade:'6', subject:'Science',         title:'Science',         icon:'🔬', href:'science-grade6.html',  live:false },
+  { grade:'6', subject:'English',         title:'English',         icon:'📖', href:'english-grade6.html',  live:false },
+  { grade:'6', subject:'Nepali',          title:'Nepali',          icon:'🇳🇵', href:'nepali-grade6.html',   live:false },
+  { grade:'6', subject:'Social Studies',  title:'Social Studies',  icon:'🌏', href:'social-grade6.html',   live:false },
+  { grade:'6', subject:'Computer Science',title:'Computer Science',icon:'💻', href:'computer-grade6.html', live:false },
+
+  /* ── GRADE 7 ── */
+  { grade:'7', subject:'Mathematics',     title:'Mathematics',     icon:'📐', href:'math-grade7.html',     live:false },
+  { grade:'7', subject:'Science',         title:'Science',         icon:'🔬', href:'science-grade7.html',  live:false },
+  { grade:'7', subject:'English',         title:'English',         icon:'📖', href:'english-grade7.html',  live:false },
+  { grade:'7', subject:'Nepali',          title:'Nepali',          icon:'🇳🇵', href:'nepali-grade7.html',   live:false },
+  { grade:'7', subject:'Social Studies',  title:'Social Studies',  icon:'🌏', href:'social-grade7.html',   live:false },
+  { grade:'7', subject:'Computer Science',title:'Computer Science',icon:'💻', href:'computer-grade7.html', live:false },
+
+  /* ── GRADE 8 ── */
+  { grade:'8', subject:'Mathematics',     title:'Mathematics',     icon:'📐', href:'math-grade8.html',     live:false },
+  { grade:'8', subject:'Science',         title:'Science',         icon:'🔬', href:'science-grade8.html',  live:false },
+  { grade:'8', subject:'English',         title:'English',         icon:'📖', href:'english-grade8.html',  live:false },
+  { grade:'8', subject:'Nepali',          title:'Nepali',          icon:'🇳🇵', href:'nepali-grade8.html',   live:false },
+  { grade:'8', subject:'Social Studies',  title:'Social Studies',  icon:'🌏', href:'social-grade8.html',   live:false },
+  { grade:'8', subject:'Computer Science',title:'Computer Science',icon:'💻', href:'computer-grade8.html', live:false },
+
+  /* ── GRADE 9 ── */
+  { grade:'9', subject:'Mathematics',     title:'Mathematics',     icon:'📐', href:'math-grade9.html',     live:false },
+  { grade:'9', subject:'Science',         title:'Science',         icon:'🔬', href:'science-grade9.html',  live:false },
+  { grade:'9', subject:'English',         title:'English',         icon:'📖', href:'english-grade9.html',  live:false },
+  { grade:'9', subject:'Nepali',          title:'Nepali',          icon:'🇳🇵', href:'nepali-grade9.html',   live:false },
+  { grade:'9', subject:'Social Studies',  title:'Social Studies',  icon:'🌏', href:'social-grade9.html',   live:false },
+  { grade:'9', subject:'Computer Science',title:'Computer Science',icon:'💻', href:'computer-grade9.html', live:false },
+
+  /* ── GRADE 10 ── */
+  { grade:'10', subject:'Mathematics',     title:'Mathematics',     icon:'📐', href:'math-grade10.html',     live:true  },
+  { grade:'10', subject:'Science',         title:'Science',         icon:'🔬', href:'science-grade10.html',  live:false },
+  { grade:'10', subject:'English',         title:'English',         icon:'📖', href:'english-grade10.html',  live:false },
+  { grade:'10', subject:'Nepali',          title:'Nepali',          icon:'🇳🇵', href:'nepali-grade10.html',   live:false },
+  { grade:'10', subject:'Social Studies',  title:'Social Studies',  icon:'🌏', href:'social-grade10.html',   live:false },
+  { grade:'10', subject:'Computer Science',title:'Computer Science',icon:'💻', href:'computer-grade10.html', live:false },
+];
+
+const SUBJECT_COLORS = {
+  'Mathematics':      '#58a6ff',
+  'Science':          '#3fb950',
+  'English':          '#d2a8ff',
+  'Nepali':           '#ff7b72',
+  'Social Studies':   '#ffa657',
+  'Computer Science': '#79c0ff',
+};
+
+const GRADES = ['6','7','8','9','10'];
+
+/* ── State ── */
+let activeGrade   = 'all';
+let activeSubject = 'all';
+
+/* ── Render ── */
+function renderCourses() {
+  const query = (document.getElementById('search-input').value || '').toLowerCase().trim();
+  const wrap  = document.getElementById('courses-wrap');
+  wrap.innerHTML = '';
+
+  let totalVisible = 0;
+
+  const gradesToShow = activeGrade === 'all' ? GRADES : [activeGrade];
+
+  gradesToShow.forEach(g => {
+    let cards = COURSES.filter(c => {
+      if (c.grade !== g) return false;
+      if (activeSubject !== 'all' && c.subject !== activeSubject) return false;
+      if (query && !c.title.toLowerCase().includes(query) && !c.subject.toLowerCase().includes(query)) return false;
+      return true;
+    });
+
+    if (!cards.length) return;
+    totalVisible += cards.length;
+
+    const section = document.createElement('div');
+    section.className = 'grade-section';
+    section.setAttribute('data-grade', g);
+
+    section.innerHTML = `
+      <div class="grade-heading">
+        <h2>Grade ${g}</h2>
+        <div class="grade-line"></div>
+        <span class="grade-count">${cards.length} course${cards.length>1?'s':''}</span>
+      </div>
+      <div class="course-grid" id="grid-${g}"></div>`;
+
+    wrap.appendChild(section);
+
+    const grid = document.getElementById('grid-' + g);
+    cards.forEach((c, i) => {
+      const color = SUBJECT_COLORS[c.subject] || '#58a6ff';
+      const el = document.createElement(c.live ? 'a' : 'div');
+      el.className = 'course-card' + (c.live ? '' : ' coming-soon');
+      el.style.setProperty('--card-color', color);
+      el.style.animationDelay = (i * 0.05) + 's';
+      if (c.live) { el.href = c.href; }
+      el.innerHTML = `
+        <div class="card-icon">${c.icon}</div>
+        <div class="card-subject">${c.subject}</div>
+        <div class="card-title">Grade ${c.grade} ${c.title}</div>
+        <div class="card-meta">
+          <span class="card-tag">NEB</span>
+          <span class="card-tag">Grade ${c.grade}</span>
+          ${!c.live ? '<span class="coming-badge">Coming soon</span>' : ''}
+          ${c.live ? '<span class="card-arrow">→</span>' : ''}
+        </div>`;
+      grid.appendChild(el);
+    });
+  });
+
+  /* Empty state */
+  if (!totalVisible) {
+    wrap.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🔍</div>
+        <p>No courses match your filters.<br>Try a different grade or subject.</p>
+      </div>`;
+  }
+
+  /* Count */
+  const live = COURSES.filter(c => c.live).length;
+  document.getElementById('results-count').innerHTML =
+    `Showing <strong>${totalVisible}</strong> course${totalVisible!==1?'s':''} · <strong>${live}</strong> live now`;
+
+  /* Stat counter */
+  document.getElementById('stat-courses').textContent = COURSES.length;
+}
+
+/* ── Filters ── */
+function setGrade(val, btn) {
+  activeGrade = val;
+  document.querySelectorAll('[data-grade]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCourses();
+}
+function setSubject(val, btn) {
+  activeSubject = val;
+  document.querySelectorAll('[data-subject]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCourses();
+}
+function applyFilters() { renderCourses(); }
+
+/* ── Boot ── */
+renderCourses();
+</script>
+</body>
+</html>
